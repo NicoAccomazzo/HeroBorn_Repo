@@ -20,6 +20,7 @@ public class PlayerBehavior : MonoBehaviour
     private float hInput;
     private Rigidbody _rb;
     private CapsuleCollider _col;
+    private GameBehavior _gameManager;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,8 @@ public class PlayerBehavior : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
 
         _col = GetComponent<CapsuleCollider>();
+
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
 
     // Update is called once per frame
@@ -78,5 +81,13 @@ public class PlayerBehavior : MonoBehaviour
         bool grounded = Physics.CheckCapsule(_col.bounds.center, capsuleBottom, distanceToGround, groundLayer, QueryTriggerInteraction.Ignore);
         
         return grounded;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.name == "Enemy")
+        {
+            _gameManager.HP -= 1;
+        }
     }
 }
